@@ -1,0 +1,97 @@
+<!-- extend from base layout -->   <!--展示首页包括顶栏左侧栏用户鉴权-->
+{% extends "base.html" %}                  <!--继承base.html母版-->
+{% block title %}首页{% endblock %}         <!--块保护，子版继承母版后保护自己内容正常运行-->
+{% block content %}                          <!--块保护，子版继承母版后保护自己内容正常运行-->
+<body class="hold-transition skin-blue sidebar-mini">
+
+
+<div class="wrapper">
+
+  <header class="main-header">
+
+    <!-- Logo -->
+    <a href="#" class="logo" style="position: fixed;">
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg">U2</span>
+    </a>
+
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+      <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span class="sr-only">Toggle navigation</span>
+      </a>
+      <div class="navbar-custom-menu">
+	<ul class="nav navbar-nav">
+      <li class="dropdown user user-menu">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          <!--  <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image"> -->
+          <span class="hidden-xs">Welcome! <b>{{request.user.username}}</b></span>
+        </a>
+        <ul class="dropdown-menu">
+          <!-- User image -->
+          <li class="user-header">
+          <!--  <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image"> -->
+          {% if request.user.is_superuser %}   //用户鉴权
+              <p>超级用户 </p>
+          {% else %}
+              <p>普通用户</p>
+          {% endif %}
+
+          </li>
+          <li class="user-footer">
+            <div class="pull-left">
+              <a href="#" class="btn btn-default btn-flat">Profile</a>
+            </div>
+            <div class="pull-right">
+              <a href="/logout/" class="btn btn-default btn-flat">退出</a>
+            </div>
+          </li>
+        </ul>
+      </li>
+
+	</ul>
+      </div>
+    </nav>
+  </header>
+  <!-- Left side column. contains the logo and sidebar -->
+  <aside class="main-sidebar" style="position: fixed;">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+      <ul class="sidebar-menu">
+        <li class="header" style="font-weight:blod;">产品技术运维中心</li>
+        <li class="active treeview">
+          <a href="#">
+            <i class="fa fa-dashboard"></i> <span>CMDB</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+              <li class="active"><a href="/cmdb/idcs/" target="mainPage"><i class="fa fa-circle-o"></i>机房</a></li>
+              <li><a href="/cmdb/racks/" target="mainPage"><i class="fa fa-circle-o"></i>机柜</a></li>
+              <li><a href="/cmdb/servers/" target="mainPage"><i class="fa fa-circle-o"></i>服务器</a></li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+
+  <div class="content-wrapper">
+      <div style="margin-left:1%; margin-right:1%">
+      <!-- 去掉滚动条-->
+          <iframe src="/cmdb/dashboard/"  id="mainPage" name="mainPage" style="width:100%; height:1200px; border:none;" frameborder="0"> </iframe>
+      </div>
+  </div>
+
+<script>
+    $("ul li").click(function(){
+      // 点击li添加样式，然后再点击同级的li再移除样式... , siblings() 获得匹配集合中每个元素的同胞
+       $(this).addClass('active').siblings().removeClass('active')
+    });
+</script>
+</div>
+</body>
+{% endblock %}

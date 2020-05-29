@@ -1,0 +1,210 @@
+{% extends "base.html" %}  <!--继承base.html母版-->
+{% block content %}        <!--块保护，子版继承母版后保护自己内容正常运行-->
+
+  <div>
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div>
+             <ol class="breadcrumb">   <!--面包屑导航,左侧导航栏-->
+                 <li><a href="/cmdb/dashboard/"><i class="fa fa-dashboard"></i> Home</a></li>
+                 <li class="active">Dashboard</li>
+             </ol>
+        </div>
+    </section>
+
+    <!-- Main content -->
+    <section>
+      <!-- Info boxes -->
+        <div class="col-md-4 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">机房</span>
+              <span id="idcs_count" class="info-box-number"></span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+
+        <!-- fix for small devices only -->
+        <div class="clearfix visible-sm-block"></div>
+
+        <div class="col-md-4 col-sm-6 col-xs-12">
+          <div class="info-box">
+
+            <div class="info-box-content">
+              <span class="info-box-text">机柜</span>
+              <span id="racks_count" class="info-box-number"></span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-4 col-sm-6 col-xs-12">
+          <div class="info-box">
+
+            <div class="info-box-content">
+              <span class="info-box-text">服务器</span>
+              <span id="servers_count" class="info-box-number"></span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">数据报告</h3>
+
+
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="row">
+                <div class="col-md-8">
+                  <p class="text-center">
+                    <strong>机房设备占比</strong>
+                  </p>
+
+                  <div>
+                      <div id="idc_device" style="height: 320px;" class="box-body chart-responsive"></div>
+                  </div>
+                  <!-- /.chart-responsive -->
+                </div>
+                <!-- /.col -->
+                <div class="col-md-4">
+                  <p class="text-center">
+                    <strong>机房可用性</strong>
+                  </p>
+                    <div id="site">
+                        <!--
+                      <div class="progress-group">
+                        <span class="progress-text">Add Products to Cart</span>
+                        <span class="progress-number"><b>160</b>/200</span>
+
+                        <div class="progress sm">
+                          <div class="progress-bar progress-bar-aqua" style="width: 80%"></div>
+                        </div>
+                      </div>
+                      -->
+                    </div>
+
+                  <!-- /.progress-group -->
+                </div>
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+            </div>
+            <!-- ./box-body -->
+            <div class="box-footer">
+              <div class="row">
+                <div class="col-sm-3 col-xs-6">
+                  <div class="description-block border-right">
+                    <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 17%</span>
+                    <h5 class="description-header">$35,210.43</h5>
+                    <span class="description-text">TOTAL REVENUE</span>
+                  </div>
+                  <!-- /.description-block -->
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-3 col-xs-6">
+                  <div class="description-block border-right">
+                    <span class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> 0%</span>
+                    <h5 class="description-header">$10,390.90</h5>
+                    <span class="description-text">TOTAL COST</span>
+                  </div>
+                  <!-- /.description-block -->
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-3 col-xs-6">
+                  <div class="description-block border-right">
+                    <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 20%</span>
+                    <h5 class="description-header">$24,813.53</h5>
+                    <span class="description-text">TOTAL PROFIT</span>
+                  </div>
+                  <!-- /.description-block -->
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-3 col-xs-6">
+                  <div class="description-block">
+                    <span class="description-percentage text-red"><i class="fa fa-caret-down"></i> 18%</span>
+                    <h5 class="description-header">1200</h5>
+                    <span class="description-text">GOAL COMPLETIONS</span>
+                  </div>
+                  <!-- /.description-block -->
+                </div>
+              </div>
+              <!-- /.row -->
+            </div>
+            <!-- /.box-footer -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+  </div>
+
+    <script src="/static/cmdb/pandect.js"></script>    //pandect.js 饼图绘制代码
+    <script>
+
+        function GetPercent(num, total) {      //进度条函数
+            num = parseFloat(num);             //当前数
+            total = parseFloat(total);         //总数
+            if (isNaN(num) || isNaN(total)) {
+                return "-";
+            }
+            return total <= 0 ? "0%" : (Math.round(num / total * 10000) / 100.00)+"%"; //计算百分比
+        }
+
+
+        function getdata (){
+            var url = "/cmdb/api_dashboard/";
+            $.ajax({
+                type: "GET",
+                url: url,
+                data: {},
+                dataType: "json",
+                success: function (data) {
+                    var data_idc_servers = data.data.data_idc_servers;
+                    bingtu(data_idc_servers);              //饼图函数
+                    var count = data.data.count
+                    $('#idcs_count').text(count.idcs)      //数据放到第一栏
+                    $('#racks_count').text(count.racks)
+                    $('#servers_count').text(count.servers)
+                    html_site = ''
+                    //$('#site').html(html_site)
+                    var data_site = data.data.data_site   //第2栏数据：机房可用性
+                    console.log(data_site)
+                    for (obj of data_site){
+                        percent = GetPercent(obj.site, obj.total_site)   //调用进度条函数
+                        html = '                  <div class="progress-group">\n' +
+                        '                    <span class="progress-text">' + obj.name + '</span>\n' +
+                        '                    <span class="progress-number"><b>' + obj.site + '</b>/' + obj.total_site + '</span>\n' +
+                        '\n' +
+                        '                    <div class="progress sm">\n' +
+                        '                      <div class="progress-bar progress-bar-aqua" style="width: ' + percent + '"></div>\n' +
+                        '                    </div>\n' +
+                        '                  </div>'
+                        html_site += html
+                    }
+                    $('#site').html(html_site)
+                }
+            })
+
+        }
+
+        getdata()
+
+    </script>
+
+{% endblock %}

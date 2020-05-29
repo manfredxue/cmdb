@@ -1,0 +1,112 @@
+<html>                   <!--用户LDAP验证页面，猫头鹰登录界面-->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>u2</title>
+<link rel="stylesheet" href="/static/css/jq22.css">
+<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/wintrue.js"></script>  <!-- flash 方法，使元素抖动 -->
+</head>
+<body>
+<!-- begin -->
+<div id="login">
+    <div class="wrapper">
+        <div class="login">
+            <div action="#" class="container offset1 loginform">
+                <div id="owl-login">
+                    <div class="hand"></div>
+                    <div class="hand hand-r"></div>
+                    <div class="arms">
+                        <div class="arm"></div>
+                        <div class="arm arm-r"></div>
+                    </div>
+                </div>
+                <div id="loginpad" class="pad">
+                    <input type="hidden" name="_csrf" value="9IAtUxV2CatyxHiK2LxzOsT6wtBE6h8BpzOmk=">
+                    <div style="margin-bottom: 20px">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" id="ldapCheckbox" value="ldap"> LDAP登录
+                        </label>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <label for="uname" class="control-label fa fa-user"></label>
+                            <input id="uname" type="email" name="email" placeholder="用户名" tabindex="1" autofocus="autofocus" class="form-control input-medium">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <label for="password" class="control-label fa fa-asterisk"></label>
+                            <input onkeydown=KeyDown() id="password" type="password" name="password" placeholder="密码" tabindex="2" class="form-control input-medium">
+                        </div>
+                    </div>
+			        <span id="loginrz" style="color:red"> </span>
+                </div>
+                <div class="form-actions">
+                    <button id="loginbtn" type="submit" tabindex="4" class="btn btn-info" style="margin-right:42%"><span class="glyphicon glyphicon-off"> </span> 登录</button>
+                </div>
+	    </div>
+        </div>
+    </div>
+</div>
+
+    <script>
+
+    function KeyDown()  // 输入密码后，按回车键登陆
+        {
+  	  if (event.keyCode == 13)    //event.keyCode按的键的代码，13表示回车
+  	    {
+    		event.returnValue=false;
+    		event.cancel = true;
+    		$('#loginbtn').click();
+  		}
+	}
+
+    $(function() {
+        $('#login #password').focus(function() {     //点击登录密码框
+            $('#owl-login').addClass('password');    //猫头鹰登录框添加密码
+        }).blur(function() {                         //离开登录密码框
+            $('#owl-login').removeClass('password'); //猫头鹰登录框删除密码
+        });
+    });
+
+
+    $("#loginbtn").click(function(){
+	    var username = $("#uname").val()
+        var password = $("#password").val()
+        ldap = $("#ldapCheckbox").is(':checked')    //ldapcheckbox是否选中
+        if (ldap == true) {
+            var login_type = 'ldap'                //变量赋值给ops/views.py
+        } else {
+            login_type = ''
+        }
+        $.ajax({
+             type: "POST",                       //创建数据
+             url: "/login/",
+             data: {username:username, password:password, login_type:login_type},
+             dataType: "json",
+             success: function(result){
+                 status = result.status
+                 if (status == 0){                                 //登录成功
+                     location.href = "/"
+                 }
+                 else if (status == 1) {
+                     $('#loginrz').html('您的用户名或密码错误')      //登录认证页报错1：用户名密码错误
+                     flash('#loginpad',8,10,100)
+                 }
+                 else if (status == 2) {
+                     data = result.data
+                     $('#loginrz').html(data.desc + ', ' + data.info)  //登录认证页报错2：其他原因
+                     flash('#loginpad',8,10,100)
+                 }
+             },
+	     error: function(){
+	     //显示错误信息
+	     },
+	})
+	})
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+{% extends "base.html" %}            <!--继承base.html母版-->
+{% block content %}                  <!--块保护，子版继承母版后保护自己内容正常运行-->
+{% include 'cmdb/modal_idcs.html' %} <!--本页包含子页面-->
+
+     <div>
+         <ol class="breadcrumb">  <!--面包屑导航,左侧导航栏-->
+             <li><a href="/cmdb/dashboard/"><i class="fa fa-dashboard"></i> Home</a></li>  <!--点击Home跳转回dashboard-->
+             <li class="active">机房</li>
+         </ol>
+    </div>
+
+    <div style="margin-bottom: 20px" class="col-md-12">
+        <p></p>
+        <div class="col-md-4">   <!--新增按钮，有id-->
+            <button id="add" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-plus"></span>新增</button>
+        </div>
+        <div class="col-md-4">
+            <div class="input-group">    <!--输入框-->
+                <input id="search" type="text" class="form-control" placeholder="机房名或地址">
+                <span class="input-group-btn">  <!--搜索按钮-->
+                    <button id="search_btn" class="btn btn-default" type="button">搜索</button>
+                </span>
+            </div>
+        </div>
+        <p></p>
+    </div>
+
+    <div style="margin-top: 10px">
+        <table id="idctable" class="table table-striped table-bordered table-hover dataTable no-footer">
+            <thead>
+                  <tr>
+                      <th>ID</th>
+                      <th>机房名</th>
+                      <th>机柜数</th>
+                      <th>地址</th>
+                      <th>备注</th>
+                      <th>其他1</th>
+                      <th>操作</th>
+                  </tr>
+            </thead>
+            <tbody id='table-content'>
+            {% for obj in paginator_data.object_list %}
+                <tr>
+                    <td><a href="/cmdb/idcs/{{ obj.id }}">{{ obj.id }}</a></td>
+                    <td>{{ obj.name }}</td>
+                    <td>
+                        {% if obj.racks.count != 0 %}
+                            <a href="/cmdb/racks/?idc_id={{ obj.id }}">{{ obj.racks.count }}</a>
+                        {% else %}
+                            {{ obj.racks.count }}
+                        {% endif %}
+                    </td>
+                    <td>{{ obj.address }}</td>
+                    <td>{{ obj.remark }}</td>
+                    <td>{{ obj.col1 }}</td>
+                    <td>
+                        <button class="btn btn-xs btn-warning edit">编辑</button>    <!--编辑按钮，有class-->
+                        <button class="btn btn-xs btn-danger delete">删除</button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="yahoo2" style="margin-left:1%">
+        {% if paginator_data.has_previous %}
+            <a class='paginator' href='?page={{ paginator_data.previous_page_number }}&search={{search}}'><span>上一页</span></a>
+        {% endif %}
+
+        {% for page in paginator_data.paginator.page_range %}
+            {% if paginator_data.number == page %}
+                <span id="currentpage">{{ page }}</span>
+            {% else %}
+                <a class='paginator' href='?page={{ page }}&search={{search}}' title='{{ page }}'><span>{{ page }}</span></a>
+            {% endif %}
+        {% endfor %}
+
+        {% if paginator_data.has_next %}
+            <a class='paginator' href='?page={{ paginator_data.next_page_number }}&search={{search}}'><span>下一页</span></a>
+        {% endif %}
+    </div>
+<!--Javascript代码-->
+    <script>
+
+        // 点击新增按钮弹起模态框，触发click事件，取function()执行
+        $('#add').click(function(){                //根据上面CSS定义不同方式，通过找到id: $('#id')
+            $('#create_modal').modal()             //#create_modal--模态框名，modal()弹起模态函数
+        });
+
+        // 点击模态框提交按钮，发送数据到前后端
+        $('#create_btn').click(function () {
+            var name = $('#create_name').val();   //从输入框取值
+            var address = $('#create_address').val();
+            var remark = $('#create_remark').val();
+            var data = {name:name, address:address, remark:remark}
+            $.ajax({                              //ajax前后端数据交互，向后端请求数据，处理后发送到前端
+                type: 'post',                     //请求类型HTTP中get请求，put修改，post创建，delete删除
+                url: '/cmdb/idcs/',               //引用url
+                data: data,                       //前端传给后端数据
+                dataType: 'json',                 //数据类型
+                success: function(result){        //后端返回数据result与前端data相反
+                    status = result.status        //执行状态码
+                    data = result.data            //前端传入数据，(处理)返回前端
+                    if (status == 1) {            //成功
+                        location.reload()         //重新加载页面
+                    } else {
+                        alert(data)               //否则弹出消息框,内容为data
+                    }
+                },
+            })
+        });
+
+        // 点击编辑按钮弹起模态框
+        $('.edit').click(function () {           //根据CSS定义不同方式，通过找到通过class: $('.classname')找到
+            $('#edit_modal').modal();            //通过元素本身: $(this)
+            var id = $.trim($(this).parents("tr").children("td").eq(0).text()); //取本修改按钮所在行的父父元素tr表行的子元素表列td为0的文本内容
+            var name = $.trim($(this).parents("tr").children("td").eq(1).text());
+            var address = $.trim($(this).parents("tr").children("td").eq(3).text());
+            var remark = $.trim($(this).parents("tr").children("td").eq(4).text());
+            $('#edit_id').attr('value', id)   //#edit_id编辑框的属性值value改变为id
+            $('#edit_name').attr('value', name); //attr与val() 2种赋值方式
+            $('#edit_address').attr('value', address);
+            $('#edit_remark').attr('value', remark);
+        });
+
+        // 点击模态框提交按钮，发送数据到前后端
+        $('#edit_btn').click(function () {             //通过找到id: $('#id')
+            var id = $('#edit_id').val()               //取值
+            var name = $('#edit_name').val()
+            var address = $('#edit_address').val()
+            var remark = $('#edit_remark').val()
+            var data = {name:name, address:address, remark:remark}
+            $.ajax({
+                type: 'put',
+                url: '/cmdb/idcs/' + id + '/',
+                data: data,                           //前端传给后端数据
+                dataType: 'json',
+                success: function(result){
+                    status = result.status
+                    data = result.data                //后端返回前端数据
+                    if (status == 1) {
+                        location.reload()
+                    } else {
+                        alert(data)
+                    }
+                },
+            })
+        })
+
+        // 点击删除按钮,删除该id行记录
+        $('.delete').click(function () {             //通过找到通过class: $('.classname')找到
+            var id = $.trim($(this).parents("tr").children("td").eq(0).text()); //取值id
+            $.ajax({
+                type: 'delete',
+                url: '/cmdb/idcs/' + id + '/',
+                data: '',
+                dataType: 'json',
+                success: function(result){
+                    location.reload()
+                },
+            })
+        })
+
+        // 点击搜索按钮
+        $('#search_btn').click(function () {           //通过找到id: $('#id')
+            var search = $('#search').val()
+            window.location.href = "/cmdb/idcs/?search=" + search   //当前页面打开URL页面
+        })
+
+    </script>
+
+{% endblock %}

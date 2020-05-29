@@ -1,0 +1,195 @@
+
+<div class="modal fade" id="create_modal" select_options="">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">创建服务器</h4>
+            </div>
+
+            <div style="margin-top: 20px">
+                <form class="form-horizontal" onsubmit="return false;">
+                    <div class="form-group">
+                        <label for="create_rack_id" class="col-sm-3 control-label"><span style="color:red; margin-right:10px">*</span>选择机柜</label>
+                        <div class="col-sm-8">
+                            <select id="create_rack_id" class="form-control">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="create_name" class="col-sm-3 control-label"><span style="color:red; margin-right:10px">*</span>主机名</label>
+                        <div class="col-sm-8">
+                            <input id="create_name" type="text" class="form-control" placeholder=""/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="create_cpu" class="col-sm-3 control-label"><span style="color:red; margin-right:10px">*</span>CPU</label>
+                        <div class="col-sm-8">
+                            <input id="create_cpu" type="text" class="form-control" placeholder=""/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="create_memory" class="col-sm-3 control-label"><span style="color:red; margin-right:10px">*</span>内存</label>
+                        <div class="col-sm-8">
+                            <input id="create_memory" type="text" class="form-control" placeholder=""/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="create_disk" class="col-sm-3 control-label"><span style="color:red; margin-right:10px">*</span>磁盘</label>
+                        <div class="col-sm-8">
+                            <input id="create_disk" type="text" class="form-control" placeholder=""/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="create_ip" class="col-sm-3 control-label"><span style="color:red; margin-right:10px">*</span>IP</label>
+                        <div class="col-sm-8">
+                            <input id="create_ip" type="text" class="form-control" placeholder=""/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="create_uuid" class="col-sm-3 control-label"><span style="color:red; margin-right:10px">*</span>UUID</label>
+                        <div class="col-sm-8">
+                            <input id="create_uuid" type="text" class="form-control" placeholder=""/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="create_business" class="col-sm-3 control-label"><span style="color:red; margin-right:10px">*</span>业务线</label>
+                        <div class="col-sm-8">
+                            <input id="create_business" type="text" class="form-control" placeholder=""/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="create_status" class="col-sm-3 control-label"><span style="color:red; margin-right:10px">*</span>状态</label>
+                        <div class="col-sm-8">
+                            <select id="create_status" class="form-control">
+                                <option status_id="0">下线</option>
+                                <option status_id="1">在线</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="create_remark" class="col-sm-3 control-label"><span style="color:red; margin-right:10px">*</span>备注</label>
+                        <div class="col-sm-8">
+                            <input id="create_remark" type="text" class="form-control" placeholder=""/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button id="create_btn" type="button" class="btn btn-primary">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<div class="modal fade" id="edit_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">修改服务器</h4>
+            </div>
+
+            <div style="margin-top: 20px">
+                <form class="form-horizontal" onsubmit="return false;">
+                    <div class="form-group">
+                        <label for="edit_id" class="col-sm-3 control-label"><span style="color:red; margin-right:10px">*</span>ID</label>
+                        <div class="col-sm-8">
+                            <input id="edit_id" readonly="readonly" type="text" class="form-control" placeholder=""/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_name" class="col-sm-3 control-label"><span style="color:red; margin-right:10px">*</span>主机名</label>
+                        <div class="col-sm-8">
+                            <input id="edit_name" type="text" class="form-control" placeholder=""/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_rack_id" class="col-sm-3 control-label"><span style="color:red; margin-right:10px">*</span>选择机柜</label>
+                        <div class="col-sm-8">
+                            <select id="edit_rack_id" class="form-control">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_cpu" class="col-sm-3 control-label"><span style="color:red; margin-right:10px">*</span>CPU</label>
+                        <div class="col-sm-8">
+                            <input id="edit_cpu" type="text" class="form-control" placeholder=""/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_memory" class="col-sm-3 control-label"><span style="color:red; margin-right:10px">*</span>内存</label>
+                        <div class="col-sm-8">
+                            <input id="edit_memory" type="text" class="form-control" placeholder=""/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_disk" class="col-sm-3 control-label"><span style="color:red; margin-right:10px">*</span>磁盘</label>
+                        <div class="col-sm-8">
+                            <input id="edit_disk" type="text" class="form-control" placeholder=""/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_ip" class="col-sm-3 control-label"><span style="color:red; margin-right:10px">*</span>IP</label>
+                        <div class="col-sm-8">
+                            <input id="edit_ip" type="text" class="form-control" placeholder=""/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_uuid" class="col-sm-3 control-label"><span style="color:red; margin-right:10px">*</span>UUID</label>
+                        <div class="col-sm-8">
+                            <input id="edit_uuid" type="text" class="form-control" placeholder=""/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_business" class="col-sm-3 control-label"><span style="color:red; margin-right:10px">*</span>业务线</label>
+                        <div class="col-sm-8">
+                            <input id="edit_business" type="text" class="form-control" placeholder=""/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_status" class="col-sm-3 control-label"><span style="color:red; margin-right:10px">*</span>状态</label>
+                        <div class="col-sm-8">
+                            <select id="edit_status" class="form-control">
+                                <option status_id="0">下线</option>
+                                <option status_id="1">在线</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_remark" class="col-sm-3 control-label"><span style="color:red; margin-right:10px">*</span>备注</label>
+                        <div class="col-sm-8">
+                            <input id="edit_remark" type="text" class="form-control" placeholder=""/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button id="edit_btn" type="button" class="btn btn-primary">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<div class="modal fade" id="daq_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" >采集信息 <span id="server_id"> </span></h4>
+            </div>
+
+            <form class="form-horizontal" onsubmit="return false;">
+                <div class="form-group" id="daq_content" style="margin-left: 20px">
+                </div>
+            </form>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
